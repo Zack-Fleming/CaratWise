@@ -2,10 +2,22 @@
 title: "CaratWiseModel"
 author: "Zackery Fleming, Jake Compton, Cristian Castro"
 date: "2023-10-26"
-output: html_document
+output:
+  html_document:
+    css: styles.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+### Importaing Libraries
+
+```{r}
+
+```
+
+
+
+# Data Exploration
