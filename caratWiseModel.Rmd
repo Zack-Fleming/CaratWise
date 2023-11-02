@@ -10,6 +10,12 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+![Diamond Dimensions](DiamondImage.jpg)
+Introduction
+The goal of our project is to predict the price of diamonds within 80% to 90% accuracy of the true price.  The audience that is most interested in our work consists of the buyers and sellers of diamonds.  The dataset that we use in this project comes from Kaggle. We begin by exploring and analyzing the dataset.  We then move onto data wrangling, testing models, and finally our results.  We conclude with an explanation of our findings. 
+
+Explanation of the Diamond Dataset
+
 
 
 ### Importaing Libraries
