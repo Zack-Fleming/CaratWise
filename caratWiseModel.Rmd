@@ -18,12 +18,99 @@ Explanation of the Diamond Dataset
 
 
 
-### Importaing Libraries
+## Importaing Libraries and Data
 
 ```{r}
+library(tidyverse)  # data manipulation and wrangling
+library(ggplot2)    # graphs and charts for data visualization
+library(gridExtra)  # showing multiple plots next one another
+library(reshape2)   # for reshaping matrices, for correlation matrix
 
+diamonds_raw <- read_csv("diamonds.csv", col_names = TRUE, col_types = "ncccnnnnnn")
 ```
 
 
 
-# Data Exploration
+## Data Exploration
+
+
+
+
+## Data Visualization
+
+Now its a good time to look at the dataset, to see what we can expect. Charts and graphs is a great way to visually understand the dataset.
+
+### Data Summary
+
+Let's start with simply looking at the first few records, to get an idea of what we are looking at.
+```{r}
+head(diamonds_raw)
+```
+
+
+Now, let's look at a summary of the dataset, to see the ranges and medians of the columns, as well as if there are any missing/NULL values. 
+```{r}
+summary(diamonds_raw)
+```
+The summary shows that the dataset at least has not missing values, and that that some columns may have some outliers especially the price column.
+
+
+### Data Correlation
+
+Now, let's look at the correlation of the columns of data. This can be done in multiple ways, 
+
+First, we need to calculate the correlation matrix for the columns. This can be done using a built-in function of R, **cor()**.
+```{r}
+# filter the non numeric columns
+corr_data <- diamonds_raw[, c(1,5:10)]
+
+# calculate and print the resulting matrix
+corr_matrix <- round(cor(corr_data), 2)
+corr_matrix
+```
+
+Now, we need to **melt** the correlation matrix, using a function from the **reshape2** library. The **melt** function does a similar thing to **pivot_longer**.
+```{r}
+melted_corr_matrix <- melt(corr_matrix)
+head(melted_corr_matrix)
+```
+
+Third, we use **ggplot2's geom_tile()** to graph the correlation matrix.
+```{r}
+ggplot(data = melted_corr_matrix, aes(x=Var1, y=Var2, fill=value)) +
+  geom_tile()
+```
+
+In an effort to make this correlation matrix more readable, we can turn it into a heatmap. A heatmap is helpful, since it uses a different color negative and positive correlation. Also, the heatmap takes out the redundant info from the correlation matrix. We can also take the heatmap and make descisions of what columns to use and discard for the prediction models.
+
+To convert our correlation matrix into a form that is helpful for the heatmap, we must define a couple of helper functions:
+```{r}
+# get the lower triangle of the matrix
+calc_lower_Triangle() <- function(corr_mat) {
+  corr_mat[upper.tri(corr_mat)] <- NA
+  return(corr_mat)
+}
+
+# get the upper triangle of the matrix
+calc_upper_Triangle() <- function(corr_mat) {
+  corr_mat[lower.tri(corr_mat)] <- NA
+  return(corr_mat)
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
