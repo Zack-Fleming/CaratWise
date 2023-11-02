@@ -51,7 +51,7 @@ Now, let's look at a summary of the dataset, to see the ranges and medians of th
 ```{r}
 summary(diamonds_raw)
 ```
-The summary shows that the dataset at least has not missing values, and that that some columns may have some outliers especially the price column.
+The summary shows that the dataset at least has no missing values, and that that some columns may have some outliers or erronious data. 
 
 
 ### Data Correlation
@@ -116,6 +116,7 @@ unordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = va
   coord_fixed()
 ```
 
+<<<<<<< HEAD
 Before we plot the graph, it may be a good idea to add labels to each of the squares.
 ```{r}
 unordered_heatmap +
@@ -172,6 +173,84 @@ ordered_heatmap +
   guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
                                title.position = "top", title.hjust = 0.5))  
 ```
+=======
+Handling outliers in the dataset
+```{r}
+#Visualizing outliers in the dataset
+boxplot(diamonds_raw$carat)
+boxplot(diamonds_raw$depth)
+boxplot(diamonds_raw$table)
+boxplot(diamonds_raw$x)
+boxplot(diamonds_raw$y)
+boxplot(diamonds_raw$z)
+
+#Handling outliers
+#Carat
+the_mean <- mean(as.numeric(diamonds_raw$carat))
+the_sd <- sd(as.numeric(diamonds_raw$carat))
+
+diamond_outliers1 <- diamonds_raw |>
+  mutate(zscore = (carat - the_mean)/the_sd) |>
+  filter(zscore <= 3 & zscore >= -3)
+
+summary(diamond_outliers1) #Lost 439 records which is only 0.81% of the data
+
+#depth
+the_mean <- mean(as.numeric(diamonds_raw$depth))
+the_sd <- sd(as.numeric(diamonds_raw$depth))
+
+diamond_outliers2 <- diamond_outliers1 |>
+  mutate(zscore = (depth - the_mean)/the_sd) |>
+  filter(zscore <= 3 & zscore >= -3)
+
+summary(diamond_outliers2) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
+
+#table
+the_mean <- mean(as.numeric(diamonds_raw$table))
+the_sd <- sd(as.numeric(diamonds_raw$table))
+
+diamond_outliers3 <- diamond_outliers2 |>
+  mutate(zscore = (table - the_mean)/the_sd) |>
+  filter(zscore <= 3 & zscore >= -3)
+
+summary(diamond_outliers3) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
+
+#x
+the_mean <- mean(as.numeric(diamonds_raw$x))
+the_sd <- sd(as.numeric(diamonds_raw$x))
+
+diamond_outliers4 <- diamond_outliers3 |>
+  mutate(zscore = (x - the_mean)/the_sd) |>
+  filter(zscore <= 3 & zscore >= -3)
+
+summary(diamond_outliers4) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
+
+#y
+the_mean <- mean(as.numeric(diamonds_raw$y))
+the_sd <- sd(as.numeric(diamonds_raw$y))
+
+diamond_outliers5 <- diamond_outliers4 |>
+  mutate(zscore = (y - the_mean)/the_sd) |>
+  filter(zscore <= 3 & zscore >= -3)
+
+summary(diamond_outliers5) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
+
+#z
+the_mean <- mean(as.numeric(diamonds_raw$z))
+the_sd <- sd(as.numeric(diamonds_raw$z))
+
+diamond_outliers6 <- diamond_outliers5 |>
+  mutate(zscore = (z - the_mean)/the_sd) |>
+  filter(zscore <= 3 & zscore >= -3)
+
+summary(diamond_outliers6) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
+```
+
+
+
+
+
+>>>>>>> 4553468ab9b5bc99eff4a4614c2d1363bf965291
 
 
 
