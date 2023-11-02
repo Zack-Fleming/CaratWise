@@ -174,7 +174,12 @@ ordered_heatmap +
                                title.position = "top", title.hjust = 0.5))  
 ```
 =======
-Handling outliers in the dataset
+
+## Data Visualization
+
+### Handling outliers
+
+
 ```{r}
 #Visualizing outliers in the dataset
 boxplot(diamonds_raw$carat)
@@ -246,11 +251,6 @@ diamond_outliers6 <- diamond_outliers5 |>
 summary(diamond_outliers6) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
 
-
-
-
-
->>>>>>> 4553468ab9b5bc99eff4a4614c2d1363bf965291
 
 
 
