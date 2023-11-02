@@ -80,6 +80,9 @@ ggplot(data = melted_corr_matrix, aes(x=Var1, y=Var2, fill=value)) +
   geom_tile()
 ```
 
+
+### Heatmaps of Data
+
 In an effort to make this correlation matrix more readable, we can turn it into a heatmap. A heatmap is helpful, since it uses a different color negative and positive correlation. Also, the heatmap takes out the redundant info from the correlation matrix. We can also take the heatmap and make descisions of what columns to use and discard for the prediction models.
 
 To convert our correlation matrix into a form that is helpful for the heatmap, we must define a couple of helper functions:
@@ -95,22 +98,15 @@ calc_upper_Triangle <- function(corr_mat) {
   corr_mat[lower.tri(corr_mat)] <- NA
   return(corr_mat)
 }
-
-# reordering a correlation matrix
-reorder_matrix <- function(corr_mat) {
-  dd <- as.dist((1 - corr_mat) / 2)
-  hc <- hclust(dd)
-  corr_mat <- corr_mat[hc$order, hc$order]
-}
 ```
 
-Now, we can create the final heat map for the dataset. 
+After creating our helper functions, we can create a basic and un-ordered heatmap. 
 ```{r}
 # melt the upper triangle of the correlation matrix.
 melted_corr_matrix <- melt(calc_upper_Triangle(corr_mat = corr_matrix), na.rm = TRUE)
 
-# plot the resulting matrix as a heatmap
-plot1 <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) + 
+# create the basic unordered heatmap plot
+unordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) + 
   geom_tile(color = "white") + 
   scale_fill_gradient2(low = "blue", mid = "white", high = "red",       # setup the colors
                        midpoint = 0, limit = c(-1, 1), space = "Lab",   # setup the ranges
@@ -120,9 +116,62 @@ plot1 <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) +
   coord_fixed()
 ```
 
+Before we plot the graph, it may be a good idea to add labels to each of the squares.
+```{r}
+unordered_heatmap +
+  geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) + 
+  theme( # adding the thematic items
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.major = element_blank(), panel.border = element_blank(),
+    panel.background = element_blank(), axis.ticks = element_blank(),
+    legend.justification = c(1, 0), legend.position = c(0.55, 0.75), 
+    legend.direction = "horizontal") + 
+  guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
+                               title.position = "top", title.hjust = 0.5))
+```
 
+Lastly, for heatmaps we can organize the correlation matrix by highest to lowest correlation. This can help in finding any 'hidden' patterns in the correlation of variables. To do this, we will define another helper function that uses **hclust**; ordering the matrix in a hierarchical clustering order. 
+```{r}
+# reordering a correlation matrix, using hclust
+reorder_matrix <- function(corr_mat) {
+  dd <- as.dist((1 - corr_mat) / 2)
+  hc <- hclust(dd)
+  corr_mat <- corr_mat[hc$order, hc$order]
+}
+```
 
+Similar to the un-ordered heatmap, we are going to truncate the repeating side of the correlation matrix, as it is not needed. Then the correlation matrix is melted before being plotted.
+```{r}
+# 1. reordering the correlation matrix
+corr_matrix <- reorder_matrix(corr_matrix)
 
+# 2. truncate and melt the matrix
+melted_corr_matrix <- melt(calc_upper_Triangle(corr_mat = corr_matrix), na.rm = TRUE)
+
+# 3. create the basic plot
+ordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) + 
+  geom_tile(color = "white") + 
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red",       # setup the colors
+                       midpoint = 0, limit = c(-1, 1), space = "Lab",   # setup the ranges
+                       name="Diamond\nCorrelation") +                   # title of graph
+  theme_minimal() + # setup the theme
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1)) + 
+  coord_fixed()
+```
+
+Again, now we can add value labeling to the squares and move the legend.
+```{r}
+ordered_heatmap +
+  geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) + 
+  theme( # adding the thematic items
+    axis.title.x = element_blank(), axis.title.y = element_blank(),
+    panel.grid.major = element_blank(), panel.border = element_blank(),
+    panel.background = element_blank(), axis.ticks = element_blank(),
+    legend.justification = c(1, 0), legend.position = c(0.55, 0.75), 
+    legend.direction = "horizontal") + 
+  guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
+                               title.position = "top", title.hjust = 0.5))  
+```
 
 
 
