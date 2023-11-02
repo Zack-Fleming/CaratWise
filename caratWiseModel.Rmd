@@ -90,6 +90,13 @@ calc_upper_Triangle <- function(corr_mat) {
   corr_mat[lower.tri(corr_mat)] <- NA
   return(corr_mat)
 }
+
+# reordering a correlation matrix
+reorder_matrix <- function(corr_mat) {
+  dd <- as.dist((1 - corr_mat) / 2)
+  hc <- hclust(dd)
+  corr_mat <- corr_mat[hc$order, hc$order]
+}
 ```
 
 Now, we can create the final heat map for the dataset. 
@@ -98,7 +105,7 @@ Now, we can create the final heat map for the dataset.
 melted_corr_matrix <- melt(calc_upper_Triangle(corr_mat = corr_matrix), na.rm = TRUE)
 
 # plot the resulting matrix as a heatmap
-ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) + 
+plot1 <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) + 
   geom_tile(color = "white") + 
   scale_fill_gradient2(low = "blue", mid = "white", high = "red",       # setup the colors
                        midpoint = 0, limit = c(-1, 1), space = "Lab",   # setup the ranges
