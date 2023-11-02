@@ -17,9 +17,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The goal of our project is to predict the price of diamonds within 80% to 90% accuracy of the true price.  The audience that is most interested in our work consists of the buyers and sellers of diamonds.  The dataset that we use in this project comes from Kaggle. We begin by exploring and analyzing the dataset.  We then move onto data wrangling, testing models, and finally our results.  We conclude with an explanation of our findings. 
 
+
 ## Explanation of the Diamond Dataset
 
+The diamond dataset consists of several attributes that may affect the price of a diamond.  Through analysis, we will determine what attributes are correlated with diamond prices. 
 
+ - **Carat** refers to the weight of the diamond.  Each carat is equivalent to 0.2 grams.  
+ - **Cut** describes how well the rough diamond is transformed into the finished diamond.  The ideal cut of a diamond is one that is symmetrical and glows well when exposed to ultra-violet light.  
+ - **Color** refers to diamond's color. Colorless diamonds are of higher quality.  
+ - **Clarity** of a diamond is defined as how clear a diamond is.  Clearer diamonds have less defects like cracks.  
+ - **Depth** of a diamond refers to the depth from the top of diamond to the point at the base expressed as a percentage.  
+ - **Table** is a percentage ratio of the top flat portion of the diamond to the thickness of the base point.  The ideal table range is between 52% and 62%.  
+ - **Price** refers to the cost of the diamond in USD.  
+ - **x** refers to the length of the diamond in millimeters.  
+ - **y** refers to the width of the diamond in millimeters.  
+ - **z** refers to the  depth of the diamond.       
+
+We note several assumptions and concerns that we made about the data set.  Our first assumption is that the features of a diamond, such as clarity, color, and cut, are good predictors of price.  One limitation is that the data set does not explicitly state the type of cut of the diamonds.  Therefore, we are assuming that all of the diamonds are of the round type cut since the type of cut can dictate the favorability of some of the diamond features.  One ethical consideration is that diamond sellers could possibly try to control the diamond market based on our study findings. However, we find this scenario to be highly unlikely.           
 
 
 ## Importaing Libraries and Data
