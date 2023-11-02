@@ -80,19 +80,33 @@ In an effort to make this correlation matrix more readable, we can turn it into 
 To convert our correlation matrix into a form that is helpful for the heatmap, we must define a couple of helper functions:
 ```{r}
 # get the lower triangle of the matrix
-calc_lower_Triangle() <- function(corr_mat) {
+calc_lower_Triangle <- function(corr_mat) {
   corr_mat[upper.tri(corr_mat)] <- NA
   return(corr_mat)
 }
 
 # get the upper triangle of the matrix
-calc_upper_Triangle() <- function(corr_mat) {
+calc_upper_Triangle <- function(corr_mat) {
   corr_mat[lower.tri(corr_mat)] <- NA
   return(corr_mat)
 }
 ```
 
+Now, we can create the final heat map for the dataset. 
+```{r}
+# melt the upper triangle of the correlation matrix.
+melted_corr_matrix <- melt(calc_upper_Triangle(corr_mat = corr_matrix), na.rm = TRUE)
 
+# plot the resulting matrix as a heatmap
+ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = value)) + 
+  geom_tile(color = "white") + 
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red",       # setup the colors
+                       midpoint = 0, limit = c(-1, 1), space = "Lab",   # setup the ranges
+                       name="Diamond\nCorrelation") +                   # title of graph
+  theme_minimal() + # setup the theme
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1)) + 
+  coord_fixed()
+```
 
 
 
