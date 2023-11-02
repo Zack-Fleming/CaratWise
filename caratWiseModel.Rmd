@@ -179,18 +179,11 @@ ordered_heatmap +
 
 ### Handling outliers
 
-
+Carat outliers
 ```{r}
-#Visualizing outliers in the dataset
 boxplot(diamonds_raw$carat)
-boxplot(diamonds_raw$depth)
-boxplot(diamonds_raw$table)
-boxplot(diamonds_raw$x)
-boxplot(diamonds_raw$y)
-boxplot(diamonds_raw$z)
 
-#Handling outliers
-#Carat
+#Carat outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$carat))
 the_sd <- sd(as.numeric(diamonds_raw$carat))
 
@@ -198,9 +191,14 @@ diamond_outliers1 <- diamonds_raw |>
   mutate(zscore = (carat - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers1) #Lost 439 records which is only 0.81% of the data
+summary(diamond_outliers1$carat) #Lost 439 records which is only 0.81% of the data
+```
 
-#depth
+Depth outliers
+```{r}
+boxplot(diamonds_raw$depth)
+
+#Depth outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$depth))
 the_sd <- sd(as.numeric(diamonds_raw$depth))
 
@@ -208,9 +206,14 @@ diamond_outliers2 <- diamond_outliers1 |>
   mutate(zscore = (depth - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers2) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
+summary(diamond_outliers2$depth) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
+```
 
-#table
+Table outliers
+```{r}
+boxplot(diamonds_raw$table)
+
+#Table outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$table))
 the_sd <- sd(as.numeric(diamonds_raw$table))
 
@@ -218,9 +221,14 @@ diamond_outliers3 <- diamond_outliers2 |>
   mutate(zscore = (table - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers3) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
+summary(diamond_outliers3$table) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
+```
 
-#x
+X outliers
+```{r}
+boxplot(diamonds_raw$x)
+
+#X outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$x))
 the_sd <- sd(as.numeric(diamonds_raw$x))
 
@@ -228,7 +236,12 @@ diamond_outliers4 <- diamond_outliers3 |>
   mutate(zscore = (x - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers4) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
+summary(diamond_outliers4$x) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
+```
+
+Y outliers
+```{r}
+boxplot(diamonds_raw$y)
 
 #y
 the_mean <- mean(as.numeric(diamonds_raw$y))
@@ -238,7 +251,12 @@ diamond_outliers5 <- diamond_outliers4 |>
   mutate(zscore = (y - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers5) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
+summary(diamond_outliers5$y) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
+```
+
+Z outliers
+```{r}
+boxplot(diamonds_raw$z)
 
 #z
 the_mean <- mean(as.numeric(diamonds_raw$z))
@@ -248,13 +266,8 @@ diamond_outliers6 <- diamond_outliers5 |>
   mutate(zscore = (z - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers6) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
+summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
-
-
-
-
-
 
 
 
