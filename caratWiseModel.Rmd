@@ -186,7 +186,6 @@ ordered_heatmap +
   guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
                                title.position = "top", title.hjust = 0.5))  
 ```
-<<<<<<< HEAD
 
 
 ### Distribution of Columns
@@ -230,7 +229,7 @@ diamonds_raw$clarity <- factor(diamonds_raw$clarity, levels = c("IF", "VVS1", "V
 
 
 
-With the columns convered, we can make the charts. 
+With the columns converted, we can make the charts. 
 ```{r}
 # chart for the cut
 plot1 <- ggplot(data = diamonds_raw, aes(x=cut, fill=cut)) +
@@ -360,15 +359,13 @@ boxplot(diamonds_raw$table)
 boxplot(diamonds_raw$x)
 boxplot(diamonds_raw$y)
 boxplot(diamonds_raw$z)
-=======
-=======
->>>>>>> 316eebbf920bb317157cf275a1ab2120b391fc1a
+```
 
-## Data Visualization
+
 
 ### Handling outliers
 
-Carat outliers
+#### Carat outliers
 ```{r}
 boxplot(diamonds_raw$carat)
 
@@ -383,7 +380,7 @@ diamond_outliers1 <- diamonds_raw |>
 summary(diamond_outliers1$carat) #Lost 439 records which is only 0.81% of the data
 ```
 
-Depth outliers
+#### Depth outliers
 ```{r}
 boxplot(diamonds_raw$depth)
 
@@ -398,7 +395,7 @@ diamond_outliers2 <- diamond_outliers1 |>
 summary(diamond_outliers2$depth) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
 ```
 
-Table outliers
+#### Table outliers
 ```{r}
 boxplot(diamonds_raw$table)
 
@@ -413,7 +410,7 @@ diamond_outliers3 <- diamond_outliers2 |>
 summary(diamond_outliers3$table) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
 ```
 
-X outliers
+#### X outliers
 ```{r}
 boxplot(diamonds_raw$x)
 
@@ -428,7 +425,7 @@ diamond_outliers4 <- diamond_outliers3 |>
 summary(diamond_outliers4$x) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
 ```
 
-Y outliers
+#### Y outliers
 ```{r}
 boxplot(diamonds_raw$y)
 
@@ -443,7 +440,7 @@ diamond_outliers5 <- diamond_outliers4 |>
 summary(diamond_outliers5$y) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
 ```
 
-Z outliers
+#### Z outliers
 ```{r}
 boxplot(diamonds_raw$z)
 
@@ -457,18 +454,3 @@ diamond_outliers6 <- diamond_outliers5 |>
 
 summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
-
-
-
-
-
-<<<<<<< HEAD
-
-
-
-
-
-=======
->>>>>>> 316eebbf920bb317157cf275a1ab2120b391fc1a
-
-
