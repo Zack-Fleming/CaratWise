@@ -17,9 +17,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The goal of our project is to predict the price of diamonds within 80% to 90% accuracy of the true price.  The audience that is most interested in our work consists of the buyers and sellers of diamonds.  The dataset that we use in this project comes from Kaggle. We begin by exploring and analyzing the dataset.  We then move onto data wrangling, testing models, and finally our results.  We conclude with an explanation of our findings. 
 
+
 ## Explanation of the Diamond Dataset
 
+The diamond dataset consists of several attributes that may affect the price of a diamond.  Through analysis, we will determine what attributes are correlated with diamond prices. 
 
+ - **Carat** refers to the weight of the diamond.  Each carat is equivalent to 0.2 grams.  
+ - **Cut** describes how well the rough diamond is transformed into the finished diamond.  The ideal cut of a diamond is one that is symmetrical and glows well when exposed to ultra-violet light.  
+ - **Color** refers to diamond's color. Colorless diamonds are of higher quality.  
+ - **Clarity** of a diamond is defined as how clear a diamond is.  Clearer diamonds have less defects like cracks.  
+ - **Depth** of a diamond refers to the depth from the top of diamond to the point at the base expressed as a percentage.  
+ - **Table** is a percentage ratio of the top flat portion of the diamond to the thickness of the base point.  The ideal table range is between 52% and 62%.  
+ - **Price** refers to the cost of the diamond in USD.  
+ - **x** refers to the length of the diamond in millimeters.  
+ - **y** refers to the width of the diamond in millimeters.  
+ - **z** refers to the  depth of the diamond.       
+
+We note several assumptions and concerns that we made about the data set.  Our first assumption is that the features of a diamond, such as clarity, color, and cut, are good predictors of price.  One limitation is that the data set does not explicitly state the type of cut of the diamonds.  Therefore, we are assuming that all of the diamonds are of the round type cut since the type of cut can dictate the favorability of some of the diamond features.  One ethical consideration is that diamond sellers could possibly try to control the diamond market based on our study findings. However, we find this scenario to be highly unlikely.           
 
 
 ## Importaing Libraries and Data
@@ -172,6 +186,7 @@ ordered_heatmap +
   guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
                                title.position = "top", title.hjust = 0.5))  
 ```
+<<<<<<< HEAD
 
 
 ### Distribution of Columns
@@ -345,9 +360,19 @@ boxplot(diamonds_raw$table)
 boxplot(diamonds_raw$x)
 boxplot(diamonds_raw$y)
 boxplot(diamonds_raw$z)
+=======
+=======
+>>>>>>> 316eebbf920bb317157cf275a1ab2120b391fc1a
 
-#Handling outliers
-#Carat
+## Data Visualization
+
+### Handling outliers
+
+Carat outliers
+```{r}
+boxplot(diamonds_raw$carat)
+
+#Carat outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$carat))
 the_sd <- sd(as.numeric(diamonds_raw$carat))
 
@@ -355,9 +380,14 @@ diamond_outliers1 <- diamonds_raw |>
   mutate(zscore = (carat - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers1) #Lost 439 records which is only 0.81% of the data
+summary(diamond_outliers1$carat) #Lost 439 records which is only 0.81% of the data
+```
 
-#depth
+Depth outliers
+```{r}
+boxplot(diamonds_raw$depth)
+
+#Depth outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$depth))
 the_sd <- sd(as.numeric(diamonds_raw$depth))
 
@@ -365,9 +395,14 @@ diamond_outliers2 <- diamond_outliers1 |>
   mutate(zscore = (depth - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers2) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
+summary(diamond_outliers2$depth) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
+```
 
-#table
+Table outliers
+```{r}
+boxplot(diamonds_raw$table)
+
+#Table outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$table))
 the_sd <- sd(as.numeric(diamonds_raw$table))
 
@@ -375,9 +410,14 @@ diamond_outliers3 <- diamond_outliers2 |>
   mutate(zscore = (table - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers3) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
+summary(diamond_outliers3$table) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
+```
 
-#x
+X outliers
+```{r}
+boxplot(diamonds_raw$x)
+
+#X outlier removal
 the_mean <- mean(as.numeric(diamonds_raw$x))
 the_sd <- sd(as.numeric(diamonds_raw$x))
 
@@ -385,7 +425,12 @@ diamond_outliers4 <- diamond_outliers3 |>
   mutate(zscore = (x - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers4) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
+summary(diamond_outliers4$x) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
+```
+
+Y outliers
+```{r}
+boxplot(diamonds_raw$y)
 
 #y
 the_mean <- mean(as.numeric(diamonds_raw$y))
@@ -395,7 +440,12 @@ diamond_outliers5 <- diamond_outliers4 |>
   mutate(zscore = (y - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers5) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
+summary(diamond_outliers5$y) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
+```
+
+Z outliers
+```{r}
+boxplot(diamonds_raw$z)
 
 #z
 the_mean <- mean(as.numeric(diamonds_raw$z))
@@ -405,17 +455,20 @@ diamond_outliers6 <- diamond_outliers5 |>
   mutate(zscore = (z - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers6) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
+summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
 
 
 
 
 
+<<<<<<< HEAD
 
 
 
 
 
+=======
+>>>>>>> 316eebbf920bb317157cf275a1ab2120b391fc1a
 
 
