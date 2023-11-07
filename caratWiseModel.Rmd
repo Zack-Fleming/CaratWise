@@ -346,11 +346,47 @@ Now we will start to compare two different variables, to see if there are any tr
 
 #### Cut vs. Color
 
+Let's first start with the cut vs color. 
+```{r}
+plot1 <- ggplot(data = diamonds_raw, mapping = aes(x = cut)) + 
+  layer(geom = "bar", mapping = aes(fill = color), stat = "count", position = "stack")
+
+plot2 <- ggplot(data = diamonds_raw, mapping = aes(x = color)) + 
+  layer(geom = "bar", mapping = aes(fill = cut), stat = "count", position = "stack")
+
+grid.arrange(plot1, plot2, ncol=2)
+```
+
+
+#### Cut vs. Clarity
+
+Now, we will look at the comparison of the cut and clarity.
+```{r}
+plot1 <- ggplot(data = diamonds_raw, mapping = aes(x = cut)) + 
+  layer(geom = "bar", mapping = aes(fill = clarity), stat = "count", position = "stack")
+
+plot2 <- ggplot(data = diamonds_raw, mapping = aes(x = clarity)) + 
+  layer(geom = "bar", mapping = aes(fill = cut), stat = "count", position = "stack")
+
+grid.arrange(plot1, plot2, ncol=2)
+```
+
+#### Color vs. Clarity
+
+Lastly, we will look at the color vs clarity
+```{r}
+plot1 <- ggplot(data = diamonds_raw, mapping = aes(x = color)) + 
+  layer(geom = "bar", mapping = aes(fill = clarity), stat = "count", position = "stack")
+
+plot2 <- ggplot(data = diamonds_raw, mapping = aes(x = clarity)) + 
+  layer(geom = "bar", mapping = aes(fill = color), stat = "count", position = "stack")
+
+grid.arrange(plot1, plot2, ncol=2)
+```
 
 
 
-
-Handling outliers in the dataset
+### Handling outliers in the dataset
 ```{r}
 #Visualizing outliers in the dataset
 boxplot(diamonds_raw$carat)
@@ -362,6 +398,7 @@ boxplot(diamonds_raw$z)
 ```
 
 
+<<<<<<< HEAD
 
 ### Handling outliers
 
@@ -373,6 +410,8 @@ summary(diamonds_raw)
 
 Carat outliers
 =======
+=======
+>>>>>>> 0e086a80f2bf5541ce231bf083ef90d668568300
 #### Carat outliers
 >>>>>>> 8c65332fe2e5de5ac4b9af4f7ddfe1475bccb850
 ```{r}
