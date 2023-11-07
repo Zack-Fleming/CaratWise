@@ -194,6 +194,7 @@ ordered_heatmap +
 ### Handling outliers
 
 Carat outliers
+
 ```{r}
 boxplot(diamonds_raw$carat)
 
@@ -281,6 +282,12 @@ diamond_outliers6 <- diamond_outliers5 |>
   filter(zscore <= 3 & zscore >= -3)
 
 summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
+```
+Convert the categorical column clarity to a numeric column.
+```{r}
+# https://www.geeksforgeeks.org/how-to-replace-specific-values-in-column-in-r-dataframe/
+
+# use syntax df$Marks[df$Names == "Sita"] <- 25
 ```
 
 
