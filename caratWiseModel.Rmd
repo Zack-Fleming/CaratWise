@@ -130,7 +130,6 @@ unordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = va
   coord_fixed()
 ```
 
-<<<<<<< HEAD
 Before we plot the graph, it may be a good idea to add labels to each of the squares.
 ```{r}
 unordered_heatmap +
@@ -187,18 +186,195 @@ ordered_heatmap +
   guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
                                title.position = "top", title.hjust = 0.5))  
 ```
-=======
 
-## Data Visualization
+
+### Distribution of Columns
+
+Now we can look at the distribution of each of the columns. The following graphs will show a mean line and density plot. **Note: this is with the raw dataset, including the outliers. Some of the next graphs may have un-normalized data, that is skewed.**
+
+
+#### Carat
+
+First, we will look at the distribution of the carat of the diamond.
+```{r}
+# mean line plot
+plot1 <- ggplot(data = diamonds_raw, aes(x=carat)) +
+  geom_histogram(color = "black", fill = "white") + 
+  geom_vline(aes(xintercept = mean(carat)),
+             color = "blue", linetype="dashed", linewidth = 1)
+
+# density plot
+plot2 <- ggplot(data = diamonds_raw, aes(x=carat)) +
+  geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
+  geom_density(alpha=.2, fill = "red")
+
+# arrange the plots together
+grid.arrange(plot1, plot2, ncol=2)
+```
+
+
+#### Cut, Color, and Clarity
+
+Now we will look at the categorical columns of the dataset. however, we must first convert them to a factor. 
+```{r}
+# convert the cut column into a factor
+diamonds_raw$cut <- factor(diamonds_raw$cut, levels = c("Ideal", "Premium", "Very Good", "Good", "Fair"))
+
+# convert the color column to a factor
+diamonds_raw$color <- factor(diamonds_raw$color, levels = c("D", "E", "F", "G", "H", "I", "J"))
+
+# convert the clarity column to a factor
+diamonds_raw$clarity <- factor(diamonds_raw$clarity, levels = c("IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "I1"))
+```
+
+
+
+With the columns converted, we can make the charts. 
+```{r}
+# chart for the cut
+plot1 <- ggplot(data = diamonds_raw, aes(x=cut, fill=cut)) +
+  geom_bar() + 
+  labs(x = "Cut") + 
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+# chart for the color
+plot2 <- ggplot(data = diamonds_raw, aes(x=color, fill=color)) +
+  geom_bar() + labs(x = "Color")
+
+# chart for the clarity
+plot3 <- ggplot(data = diamonds_raw, aes(x=clarity, fill=clarity)) +
+  geom_bar() + labs(x = "Clarity") + 
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+grid.arrange(plot1, plot2, plot3, ncol = 2, nrow = 2)
+```
+
+From the charts above, we can infer some conclusions about the data in these columns.
+
+ 1. The cut column is skewed to the left, and is not in a normal distribution. 
+ 2. It looks like the color column has a more normal distribution than the cut column, however, the data still has a slight skew to the left.
+ 3. Similar to the color column, the clarity column is roughly normal, however, the column still has a slight skew to the right.
+
+
+#### Depth & Table
+
+Now, we can look at the table and depth ratios. 
+```{r}
+# mean line plot of depth
+plot1 <- ggplot(data = diamonds_raw, aes(x=depth)) +
+  geom_histogram(color = "black", fill = "white") + 
+  geom_vline(aes(xintercept = mean(depth)),
+             color = "blue", linetype="dashed", linewidth = 1)
+
+# density plot depth
+plot2 <- ggplot(data = diamonds_raw, aes(x=depth)) +
+  geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
+  geom_density(alpha=.2, fill = "red")
+
+
+# mean line for table
+plot3 <- ggplot(data = diamonds_raw, aes(x=table)) +
+  geom_histogram(color = "black", fill = "white") + 
+  geom_vline(aes(xintercept = mean(table)),
+             color = "blue", linetype="dashed", linewidth = 1)
+
+# density plot depth
+plot4 <- ggplot(data = diamonds_raw, aes(x=table)) +
+  geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
+  geom_density(alpha=.2, fill = "red")
+
+# arrange the plots together
+grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow = 2)
+```
+
+Using the graphs above, the table and depth are roughly normal, they just have a steep slope to the bell curve. 
+
+#### x, y, & z
+
+The last of the single column charts are the x, y, and z measurements of the diamond.
+
+```{r}
+# mean line for x
+plot1 <- ggplot(data = diamonds_raw, aes(x=x)) +
+  geom_histogram(color = "black", fill = "white") + 
+  geom_vline(aes(xintercept = mean(x)),
+             color = "blue", linetype="dashed", linewidth = 1)
+
+# density plot x
+plot2 <- ggplot(data = diamonds_raw, aes(x=x)) +
+  geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
+  geom_density(alpha=.2, fill = "red")
+
+
+# mean line for y
+plot3 <- ggplot(data = diamonds_raw, aes(x=y)) +
+  geom_histogram(color = "black", fill = "white") + 
+  geom_vline(aes(xintercept = mean(y)),
+             color = "blue", linetype="dashed", linewidth = 1)
+
+# density plot y
+plot4 <- ggplot(data = diamonds_raw, aes(x=y)) +
+  geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
+  geom_density(alpha=.2, fill = "red")
+
+
+# mean line for z
+plot5 <- ggplot(data = diamonds_raw, aes(x=z)) +
+  geom_histogram(color = "black", fill = "white") + 
+  geom_vline(aes(xintercept = mean(z)),
+             color = "blue", linetype="dashed", linewidth = 1)
+
+# density plot z
+plot6 <- ggplot(data = diamonds_raw, aes(x=z)) +
+  geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
+  geom_density(alpha=.2, fill = "red")
+
+grid.arrange(plot1, plot2, plot3, plot4, plot5, plot6, ncol=2, nrow = 3)
+```
+
+From the charts above, we can infer some basic conclusions about the data.
+
+ 1. The values for x, y, and z are roughly normal.
+ 2. X has a bias to the left and right of the mean line, and there are most likely some outliers to the left and right of the mean.
+ 3. y seems to have some large outliers to the right of the mean line.
+ 4. Z also seems to hame some large outliers to the right of the mena line.
+
+
+### Comparing Variables
+
+Now we will start to compare two different variables, to see if there are any trends in the data. This can be a decent tool in deciding what columns to include in our models. 
+
+#### Cut vs. Color
+
+
+
+
+
+Handling outliers in the dataset
+```{r}
+#Visualizing outliers in the dataset
+boxplot(diamonds_raw$carat)
+boxplot(diamonds_raw$depth)
+boxplot(diamonds_raw$table)
+boxplot(diamonds_raw$x)
+boxplot(diamonds_raw$y)
+boxplot(diamonds_raw$z)
+```
+
+
 
 ### Handling outliers
 
+<<<<<<< HEAD
 Summary of data before handling outlier
 ```{r}
 summary(diamonds_raw)
 ```
 
 Carat outliers
+=======
+#### Carat outliers
+>>>>>>> 8c65332fe2e5de5ac4b9af4f7ddfe1475bccb850
 ```{r}
 boxplot(diamonds_raw$carat)
 
@@ -213,7 +389,7 @@ diamond_outliers1 <- diamonds_raw |>
 summary(diamond_outliers1$carat) #Lost 439 records which is only 0.81% of the data
 ```
 
-Depth outliers
+#### Depth outliers
 ```{r}
 boxplot(diamonds_raw$depth)
 
@@ -228,7 +404,7 @@ diamond_outliers2 <- diamond_outliers1 |>
 summary(diamond_outliers2$depth) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
 ```
 
-Table outliers
+#### Table outliers
 ```{r}
 boxplot(diamonds_raw$table)
 
@@ -243,7 +419,7 @@ diamond_outliers3 <- diamond_outliers2 |>
 summary(diamond_outliers3$table) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
 ```
 
-X outliers
+#### X outliers
 ```{r}
 boxplot(diamonds_raw$x)
 
@@ -258,7 +434,7 @@ diamond_outliers4 <- diamond_outliers3 |>
 summary(diamond_outliers4$x) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
 ```
 
-Y outliers
+#### Y outliers
 ```{r}
 boxplot(diamonds_raw$y)
 
@@ -273,7 +449,7 @@ diamond_outliers5 <- diamond_outliers4 |>
 summary(diamond_outliers5$y) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
 ```
 
-Z outliers
+#### Z outliers
 ```{r}
 boxplot(diamonds_raw$z)
 
@@ -287,9 +463,12 @@ diamond_outliers6 <- diamond_outliers5 |>
 
 summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> 8c65332fe2e5de5ac4b9af4f7ddfe1475bccb850
