@@ -479,17 +479,63 @@ boxplot(diamonds_raw$z)
 the_mean <- mean(as.numeric(diamonds_raw$z))
 the_sd <- sd(as.numeric(diamonds_raw$z))
 
-diamond_outliers6 <- diamond_outliers5 |>
+diamonds_clean <- diamond_outliers5 |>
   mutate(zscore = (z - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
+summary(diamonds_clean$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
 
 
-# Convert the categorical column clarity to a numeric column.
+### Encoding Categorical Columns
+
+We will now re encode the categorical columns into a more logical/numeric columns, for use in some of the models going forward. We will be encoding the following columns in the following way:
+
+ 1. color goes to Colorless: D-F will be colorless (1) and G-J will be colored/tinted (0)
+ 2. cut will be pivot longer, converting it into a set of 'logical' columns
+ 3. clarity will also be pivot longer, converting it into a set of 'logical' columns
+
 ```{r}
-# https://www.geeksforgeeks.org/how-to-replace-specific-values-in-column-in-r-dataframe/
+# converting the color to 'logical'
+diamonds_clean <- diamonds_clean |>
+  mutate(
+    colorless = ifelse(
+      color == "D" | color == "E" | color == "F", 1, 0
+    )
+  )
 
-# use syntax df$Marks[df$Names == "Sita"] <- 25
+# converting the cut to 'logical'
+diamonds_clean <- diamonds_clean |>
+  mutate(cut.Ideal = ifelse(cut == "Ideal", 1, 0)) |>
+  mutate(cut.Premium = ifelse(cut == "Premium", 1, 0)) |>
+  mutate(cut.Very_Good = ifelse(cut == "Very Good", 1, 0)) |>
+  mutate(cut.Good = ifelse(cut == "Good", 1, 0)) |>
+  mutate(cut.Fair = ifelse(cut == "Fair", 1, 0))
+
+# converting the clarity to 'logical'
+diamonds_clean <- diamonds_clean |>
+  mutate(clarity.IF = ifelse(clarity == "IF", 1, 0)) |>
+  mutate(clarity.VVS1 = ifelse(clarity == "VVS1", 1, 0)) |>
+  mutate(clarity.VVS2 = ifelse(clarity == "VVS2", 1, 0)) |>
+  mutate(clarity.VS1 = ifelse(clarity == "VS1", 1, 0)) |>
+  mutate(clarity.VS2 = ifelse(clarity == "VS2", 1, 0)) |>
+  mutate(clarity.SI1 = ifelse(clarity == "SI1", 1, 0)) |>
+  mutate(clarity.SI2 = ifelse(clarity == "SI2", 1, 0)) |>
+  mutate(clarity.I1 = ifelse(clarity == "I1", 1, 0))
 ```
+
+Now that the data wrangling is done, as far as we know, we can finally get into the training of the prediction models.
+
+### Model Predictions
+
+The models we will be comparing are K-means, SVM,logistic regression, linear regression, and Random forest.
+
+#### Linear Regression
+
+#### Logistic Regression
+
+#### SVM
+
+#### Random Forest
+
+#### K-means
