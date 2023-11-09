@@ -398,26 +398,14 @@ boxplot(diamonds_raw$z)
 ```
 
 
-<<<<<<< HEAD
-
 ### Handling outliers
 
-<<<<<<< HEAD
 Summary of data before handling outlier
 ```{r}
 summary(diamonds_raw)
 ```
 
-Carat outliers
-<<<<<<< HEAD
-
-=======
-=======
-=======
->>>>>>> 0e086a80f2bf5541ce231bf083ef90d668568300
 #### Carat outliers
->>>>>>> 8c65332fe2e5de5ac4b9af4f7ddfe1475bccb850
->>>>>>> 9c6ad4d4db5b5cdb7f5713e7b81032b1fa09b41f
 ```{r}
 boxplot(diamonds_raw$carat)
 
@@ -506,21 +494,11 @@ diamond_outliers6 <- diamond_outliers5 |>
 
 summary(diamond_outliers6$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
-<<<<<<< HEAD
-Convert the categorical column clarity to a numeric column.
+
+
+# Convert the categorical column clarity to a numeric column.
 ```{r}
 # https://www.geeksforgeeks.org/how-to-replace-specific-values-in-column-in-r-dataframe/
 
 # use syntax df$Marks[df$Names == "Sita"] <- 25
 ```
-=======
-<<<<<<< HEAD
->>>>>>> 9c6ad4d4db5b5cdb7f5713e7b81032b1fa09b41f
-
-
-
-
-
-
-=======
->>>>>>> 8c65332fe2e5de5ac4b9af4f7ddfe1475bccb850
