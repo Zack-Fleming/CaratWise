@@ -387,20 +387,11 @@ grid.arrange(plot1, plot2, ncol=2)
 
 
 ### Handling outliers in the dataset
-```{r}
-#Visualizing outliers in the dataset
-boxplot(diamonds_raw$carat)
-boxplot(diamonds_raw$depth)
-boxplot(diamonds_raw$table)
-boxplot(diamonds_raw$x)
-boxplot(diamonds_raw$y)
-boxplot(diamonds_raw$z)
-```
 
 
 ### Handling outliers
 
-Summary of data before handling outlier
+Summary of data before handling outliers.
 ```{r}
 summary(diamonds_raw)
 ```
