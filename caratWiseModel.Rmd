@@ -90,8 +90,7 @@ head(melted_corr_matrix)
 
 Third, we use **ggplot2's geom_tile()** to graph the correlation matrix.
 ```{r}
-ggplot(data = melted_corr_matrix, aes(x=Var1, y=Var2, fill=value)) +
-  geom_tile()
+ggplot(data = melted_corr_matrix, aes(x=Var1, y=Var2, fill=value)) + geom_tile()
 ```
 
 
@@ -126,8 +125,7 @@ unordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = va
                        midpoint = 0, limit = c(-1, 1), space = "Lab",   # setup the ranges
                        name="Diamond\nCorrelation") +                   # title of graph
   theme_minimal() + # setup the theme
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1)) + 
-  coord_fixed()
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1)) + coord_fixed()
 ```
 
 Before we plot the graph, it may be a good idea to add labels to each of the squares.
@@ -140,8 +138,7 @@ unordered_heatmap +
     panel.background = element_blank(), axis.ticks = element_blank(),
     legend.justification = c(1, 0), legend.position = c(0.55, 0.75), 
     legend.direction = "horizontal") + 
-  guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
-                               title.position = "top", title.hjust = 0.5))
+  guides(fill = guide_colorbar(barwidth = 7, barheight = 1, title.position = "top", title.hjust = 0.5))
 ```
 
 Lastly, for heatmaps we can organize the correlation matrix by highest to lowest correlation. This can help in finding any 'hidden' patterns in the correlation of variables. To do this, we will define another helper function that uses **hclust**; ordering the matrix in a hierarchical clustering order. 
@@ -169,8 +166,7 @@ ordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = valu
                        midpoint = 0, limit = c(-1, 1), space = "Lab",   # setup the ranges
                        name="Diamond\nCorrelation") +                   # title of graph
   theme_minimal() + # setup the theme
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1)) + 
-  coord_fixed()
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1)) + coord_fixed()
 ```
 
 Again, now we can add value labeling to the squares and move the legend.
@@ -183,8 +179,7 @@ ordered_heatmap +
     panel.background = element_blank(), axis.ticks = element_blank(),
     legend.justification = c(1, 0), legend.position = c(0.55, 0.75), 
     legend.direction = "horizontal") + 
-  guides(fill = guide_colorbar(barwidth = 7, barheight = 1,
-                               title.position = "top", title.hjust = 0.5))  
+  guides(fill = guide_colorbar(barwidth = 7, barheight = 1, title.position = "top", title.hjust = 0.5))  
 ```
 
 
@@ -200,16 +195,14 @@ First, we will look at the distribution of the carat of the diamond.
 # mean line plot
 plot1 <- ggplot(data = diamonds_raw, aes(x=carat)) +
   geom_histogram(color = "black", fill = "white") + 
-  geom_vline(aes(xintercept = mean(carat)),
-             color = "blue", linetype="dashed", linewidth = 1)
+  geom_vline(aes(xintercept = mean(carat)), color = "blue", linetype="dashed", linewidth = 1)
 
 # density plot
 plot2 <- ggplot(data = diamonds_raw, aes(x=carat)) +
   geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
   geom_density(alpha=.2, fill = "red")
 
-# arrange the plots together
-grid.arrange(plot1, plot2, ncol=2)
+grid.arrange(plot1, plot2, ncol=2) # arrange the plots together
 ```
 
 
@@ -233,9 +226,8 @@ With the columns converted, we can make the charts.
 ```{r}
 # chart for the cut
 plot1 <- ggplot(data = diamonds_raw, aes(x=cut, fill=cut)) +
-  geom_bar() + 
-  labs(x = "Cut") + 
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+  geom_bar() + labs(x = "Cut") + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 # chart for the color
 plot2 <- ggplot(data = diamonds_raw, aes(x=color, fill=color)) +
@@ -244,7 +236,7 @@ plot2 <- ggplot(data = diamonds_raw, aes(x=color, fill=color)) +
 # chart for the clarity
 plot3 <- ggplot(data = diamonds_raw, aes(x=clarity, fill=clarity)) +
   geom_bar() + labs(x = "Clarity") + 
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 grid.arrange(plot1, plot2, plot3, ncol = 2, nrow = 2)
 ```
@@ -263,8 +255,7 @@ Now, we can look at the table and depth ratios.
 # mean line plot of depth
 plot1 <- ggplot(data = diamonds_raw, aes(x=depth)) +
   geom_histogram(color = "black", fill = "white") + 
-  geom_vline(aes(xintercept = mean(depth)),
-             color = "blue", linetype="dashed", linewidth = 1)
+  geom_vline(aes(xintercept = mean(depth)), color = "blue", linetype="dashed", linewidth = 1)
 
 # density plot depth
 plot2 <- ggplot(data = diamonds_raw, aes(x=depth)) +
@@ -275,16 +266,14 @@ plot2 <- ggplot(data = diamonds_raw, aes(x=depth)) +
 # mean line for table
 plot3 <- ggplot(data = diamonds_raw, aes(x=table)) +
   geom_histogram(color = "black", fill = "white") + 
-  geom_vline(aes(xintercept = mean(table)),
-             color = "blue", linetype="dashed", linewidth = 1)
+  geom_vline(aes(xintercept = mean(table)), color = "blue", linetype="dashed", linewidth = 1)
 
 # density plot depth
 plot4 <- ggplot(data = diamonds_raw, aes(x=table)) +
   geom_histogram(aes(y=after_stat(density)), color = "black", fill = "white") +
   geom_density(alpha=.2, fill = "red")
 
-# arrange the plots together
-grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow = 2)
+grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow = 2) # arrange the plots together
 ```
 
 Using the graphs above, the table and depth are roughly normal, they just have a steep slope to the bell curve. 
@@ -297,8 +286,7 @@ The last of the single column charts are the x, y, and z measurements of the dia
 # mean line for x
 plot1 <- ggplot(data = diamonds_raw, aes(x=x)) +
   geom_histogram(color = "black", fill = "white") + 
-  geom_vline(aes(xintercept = mean(x)),
-             color = "blue", linetype="dashed", linewidth = 1)
+  geom_vline(aes(xintercept = mean(x)), color = "blue", linetype="dashed", linewidth = 1)
 
 # density plot x
 plot2 <- ggplot(data = diamonds_raw, aes(x=x)) +
@@ -309,8 +297,7 @@ plot2 <- ggplot(data = diamonds_raw, aes(x=x)) +
 # mean line for y
 plot3 <- ggplot(data = diamonds_raw, aes(x=y)) +
   geom_histogram(color = "black", fill = "white") + 
-  geom_vline(aes(xintercept = mean(y)),
-             color = "blue", linetype="dashed", linewidth = 1)
+  geom_vline(aes(xintercept = mean(y)), color = "blue", linetype="dashed", linewidth = 1)
 
 # density plot y
 plot4 <- ggplot(data = diamonds_raw, aes(x=y)) +
@@ -321,8 +308,7 @@ plot4 <- ggplot(data = diamonds_raw, aes(x=y)) +
 # mean line for z
 plot5 <- ggplot(data = diamonds_raw, aes(x=z)) +
   geom_histogram(color = "black", fill = "white") + 
-  geom_vline(aes(xintercept = mean(z)),
-             color = "blue", linetype="dashed", linewidth = 1)
+  geom_vline(aes(xintercept = mean(z)), color = "blue", linetype="dashed", linewidth = 1)
 
 # density plot z
 plot6 <- ggplot(data = diamonds_raw, aes(x=z)) +
@@ -354,7 +340,7 @@ plot1 <- ggplot(data = diamonds_raw, mapping = aes(x = cut)) +
 plot2 <- ggplot(data = diamonds_raw, mapping = aes(x = color)) + 
   layer(geom = "bar", mapping = aes(fill = cut), stat = "count", position = "stack")
 
-grid.arrange(plot1, plot2, ncol=2)
+grid.arrange(plot1, plot2, ncol=2) # arrange the plots together
 ```
 
 
@@ -368,7 +354,7 @@ plot1 <- ggplot(data = diamonds_raw, mapping = aes(x = cut)) +
 plot2 <- ggplot(data = diamonds_raw, mapping = aes(x = clarity)) + 
   layer(geom = "bar", mapping = aes(fill = cut), stat = "count", position = "stack")
 
-grid.arrange(plot1, plot2, ncol=2)
+grid.arrange(plot1, plot2, ncol=2) # arrange the plots together
 ```
 
 #### Color vs. Clarity
@@ -381,7 +367,7 @@ plot1 <- ggplot(data = diamonds_raw, mapping = aes(x = color)) +
 plot2 <- ggplot(data = diamonds_raw, mapping = aes(x = clarity)) + 
   layer(geom = "bar", mapping = aes(fill = color), stat = "count", position = "stack")
 
-grid.arrange(plot1, plot2, ncol=2)
+grid.arrange(plot1, plot2, ncol=2) # arrange the plots together
 ```
 
 
@@ -498,11 +484,7 @@ We will now re encode the categorical columns into a more logical/numeric column
 ```{r}
 # converting the color to 'logical'
 diamonds_clean <- diamonds_clean |>
-  mutate(
-    colorless = ifelse(
-      color == "D" | color == "E" | color == "F", 1, 0
-    )
-  )
+  mutate(colorless = ifelse(color == "D" | color == "E" | color == "F", 1, 0))
 
 # converting the cut to 'logical'
 diamonds_clean <- diamonds_clean |>
