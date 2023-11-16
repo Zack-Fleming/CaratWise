@@ -43,6 +43,7 @@ library(tidyverse)  # data manipulation and wrangling
 library(ggplot2)    # graphs and charts for data visualization
 library(gridExtra)  # showing multiple plots next one another
 library(reshape2)   # for reshaping matrices, for correlation matrix
+library(e1071)      # SVM model
 
 # reading in data from csv file
 diamonds_raw <- read_csv("diamonds.csv", col_names = TRUE, col_types = "ncccnnnnnn")
@@ -510,14 +511,10 @@ Now that the data wrangling is done, as far as we know, we can finally get into 
 
 ### Model Predictions
 
-The models we will be comparing are K-means, SVM,logistic regression, linear regression, and Random forest.
+The models we will be comparing are K-means, SVM,logistic regression, linear regression, and Random forest. We will then compare the accuracy of the models, to see if any model performs within the target performance of our main goal.
 
 #### Linear Regression
 
-#### Logistic Regression
-
 #### SVM
 
-#### Random Forest
-
-#### K-means
+#### Random Forest or Decison Tree
