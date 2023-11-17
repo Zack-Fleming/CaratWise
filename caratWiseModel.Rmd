@@ -588,4 +588,31 @@ linearErrorRate
 
 #### SVM
 
+The second model we are comparing is Support Vector Machine, or SVM. This model is also a good candidate for regression predictions.
+
+```{r}
+# create the model
+svm1 <- svm(
+  price ~ carat + clarity + color,
+  data = train,
+  kernal = "sigmoid",
+  cost = 0.5,
+  scale = FALSE)
+
+svm1
+```
+
+With the model created, we can make the predictions and caclulate the relative accuracy of the model.
+
+```{r}
+svm_predict <- predict(svm1, newdata = test)
+svm_table <- table(test$price, svm_predict)
+svm_accuracy <- sum(diag(svm_table)) / sum(svm_table)
+
+#svm_table
+svm_accuracy
+```
+
+
+
 #### Random Forest or Decison Tree
