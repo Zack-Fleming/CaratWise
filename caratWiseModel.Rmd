@@ -518,9 +518,15 @@ The first model we decided to test is linear regression.
 
 ```{r}
 # Split the data into training and testing sets
-sample <- sort(sample(nrow(diamonds_clean), nrow(diamonds_clean) * .75))
-train <- diamonds_clean[sample, ] # 75% of the data set aside for training
-test <- diamonds_clean[-sample, ] # 25% of the data set aside for testing
+sample <- sort(sample(nrow(diamonds_clean), nrow(diamonds_clean) * .70))
+train <- diamonds_clean[sample, ] # 70% of the data set aside for training
+test <- diamonds_clean[-sample, ] # 30% of the data set aside for testing
+
+
+# the below is for testing purposes 
+sample2 <- sort(sample(nrow(diamonds_clean), nrow(diamonds_clean) * .01))
+train2 <- diamonds_clean[sample, ] #  of the data set aside for training
+test2 <- diamonds_clean[-sample, ] # of the data set aside for testing
 ```
 
 Next we begin to train the model.
@@ -538,7 +544,7 @@ Based off of the initial training, we make changes to the model.
 
 ```{r}
 # Tweak the model's features based on what we learned 
-linearModel2 <- lm(price ~ carat + cut + colorless + clarity + table, train)
+linearModel2 <- lm(price ~ carat + cut + colorless + clarity + table + z, train)
 
 # Check how the new model compares 
 summary(linearModel2)
@@ -548,7 +554,7 @@ cor(diamonds_clean[, c(1,5,6, 12:25)])
 
 
 # Tweak the model's features based on what we learned 
-linearModel3 <- lm(price ~ carat + cut + colorless, train)
+linearModel3 <- lm(price ~ carat + cut + clarity, train)
 
 # Check how the new model compares 
 summary(linearModel3)
@@ -558,13 +564,18 @@ cor(diamonds_clean[, c(1,5,6, 12:25)])
 
 
 # Tweak the model's features based on what we learned 
-linearModel4 <- lm(price ~ carat + cut + table, train)
+linearModel4 <- lm(price ~ carat + clarity + z + color + table, train)
 
 # Check how the new model compares 
 summary(linearModel4)
 
 # Recheck correlations 
 cor(diamonds_clean[, c(1,5,6, 12:25)]) 
+
+
+#the below is for testing purposes 
+linearModel5 <- lm(price ~ carat + clarity + z + color + table, train2)
+
 ```
 
 The last step in linear regression is to evaluate the model using the test data that we set aside earlier. 
@@ -582,6 +593,18 @@ linearModelRsme
 linearErrorRate <- linearModelRsme/mean(test$price)
 linearErrorRate
 
+
+# the below is for testing purposes 
+diamonds_clean_Linear_Prediction <- predict(linearModel5, test2)
+
+# Output metrics for how the model did
+linearModelRsme2 <- mean((test2$price - diamonds_clean_Linear_Prediction)^2) |>
+  sqrt()
+
+linearModelRsme2
+
+linearErrorRate2 <- linearModelRsme/mean(test2$price)
+linearErrorRate2
 ```
 
 
