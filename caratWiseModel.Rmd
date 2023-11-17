@@ -558,7 +558,7 @@ cor(diamonds_clean[, c(1,5,6, 12:25)])
 
 
 # Tweak the model's features based on what we learned 
-linearModel4 <- lm(price ~ carat + cut + table, train)
+linearModel4 <- lm(price ~ carat  + clarity + z + color + table, train)
 
 # Check how the new model compares 
 summary(linearModel4)
@@ -590,5 +590,28 @@ linearErrorRate
 #### SVM
 
 #### Random Forest
+
+```{r}
+rf <- randomForest(
+  price ~ carat  + clarity + z + color + table, data=train
+)
+rf
+```
+
+```{r}
+rf_predict_claim = predict(rf, newdata = test, type = "class")
+rf_table <- table(test$price, predict_claim)
+
+rf_table
+```
+
+```{r}
+rf_accuracy <- sum(diag(rf_table)) / sum(rf_table)
+
+rf_accuracy
+```
+
+
+
 
 #### K-means
