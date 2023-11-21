@@ -10,12 +10,12 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-![Diamond Dimensions](DiamondImage.jpg)
+![Diamond Dimensions](DiamondImage.jpg "Puicture showing various measurements of a diamond.")
 
 
 ## Introduction
 
-The goal of our project is to predict the price of diamonds within 80% to 90% accuracy of the true price.  The audience that is most interested in our work consists of the buyers and sellers of diamonds.  The dataset that we use in this project comes from Kaggle. We begin by exploring and analyzing the dataset.  We then move onto data wrangling, testing models, and finally our results.  We conclude with an explanation of our findings. 
+The goal of our project is to predict the price of diamonds within 80% to 90% accuracy of the true price.  The audience that is most interested in our work consists of the buyers and sellers of diamonds.  The dataset that we use in this project comes from Kaggle. We begin by exploring and analyzing the dataset.  We then move onto data wrangling, testing models, and finally our results.  We conclude with an explanation of our findings. Here is the link to the dataset we used: [Diamonds - Kaggle](https://www.kaggle.com/datasets/joebeachcapital/diamonds/) 
 
 
 ## Explanation of the Diamond Dataset
@@ -56,16 +56,19 @@ Now its a good time to look at the dataset, to see what we can expect. Charts an
 ### Data Summary
 
 Let's start with simply looking at the first few records, to get an idea of what we are looking at.
+
 ```{r}
 head(diamonds_raw)
 ```
 
 
-Now, let's look at a summary of the dataset, to see the ranges and medians of the columns, as well as if there are any missing/NULL values. 
+Now, let's look at a summary of the dataset, to see the ranges and medians of the columns, as well as if there are any missing/NULL values.
+
 ```{r}
 summary(diamonds_raw)
 ```
-The summary shows that the dataset at least has no missing values, and that that some columns may have some outliers or erronious data. 
+
+The summary shows that the dataset at least has no missing values, and that that some columns may have some outliers or erroneous data. 
 
 
 ### Data Correlation
@@ -73,6 +76,7 @@ The summary shows that the dataset at least has no missing values, and that that
 Now, let's look at the correlation of the columns of data. This can be done in multiple ways, 
 
 First, we need to calculate the correlation matrix for the columns. This can be done using a built-in function of R, **cor()**.
+
 ```{r}
 # filter the non numeric columns
 corr_data <- diamonds_raw[, c(1,5:10)]
@@ -83,12 +87,14 @@ corr_matrix
 ```
 
 Now, we need to **melt** the correlation matrix, using a function from the **reshape2** library. The **melt** function does a similar thing to **pivot_longer**.
+
 ```{r}
 melted_corr_matrix <- melt(corr_matrix)
 head(melted_corr_matrix)
 ```
 
 Third, we use **ggplot2's geom_tile()** to graph the correlation matrix.
+
 ```{r}
 ggplot(data = melted_corr_matrix, aes(x=Var1, y=Var2, fill=value)) + geom_tile()
 ```
@@ -96,9 +102,10 @@ ggplot(data = melted_corr_matrix, aes(x=Var1, y=Var2, fill=value)) + geom_tile()
 
 ### Heatmaps of Data
 
-In an effort to make this correlation matrix more readable, we can turn it into a heatmap. A heatmap is helpful, since it uses a different color negative and positive correlation. Also, the heatmap takes out the redundant info from the correlation matrix. We can also take the heatmap and make descisions of what columns to use and discard for the prediction models.
+In an effort to make this correlation matrix more readable, we can turn it into a heatmap. A heatmap is helpful, since it uses a different color negative and positive correlation. Also, the heatmap takes out the redundant info from the correlation matrix. We can also take the heatmap and make decisions of what columns to use and discard for the prediction models.
 
 To convert our correlation matrix into a form that is helpful for the heatmap, we must define a couple of helper functions:
+
 ```{r}
 # get the lower triangle of the matrix
 calc_lower_Triangle <- function(corr_mat) {
@@ -113,7 +120,8 @@ calc_upper_Triangle <- function(corr_mat) {
 }
 ```
 
-After creating our helper functions, we can create a basic and un-ordered heatmap. 
+After creating our helper functions, we can create a basic and un-ordered heatmap.
+
 ```{r}
 # melt the upper triangle of the correlation matrix.
 melted_corr_matrix <- melt(calc_upper_Triangle(corr_mat = corr_matrix), na.rm = TRUE)
@@ -129,6 +137,7 @@ unordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = va
 ```
 
 Before we plot the graph, it may be a good idea to add labels to each of the squares.
+
 ```{r}
 unordered_heatmap +
   geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) + 
@@ -142,6 +151,7 @@ unordered_heatmap +
 ```
 
 Lastly, for heatmaps we can organize the correlation matrix by highest to lowest correlation. This can help in finding any 'hidden' patterns in the correlation of variables. To do this, we will define another helper function that uses **hclust**; ordering the matrix in a hierarchical clustering order. 
+
 ```{r}
 # reordering a correlation matrix, using hclust
 reorder_matrix <- function(corr_mat) {
@@ -152,6 +162,7 @@ reorder_matrix <- function(corr_mat) {
 ```
 
 Similar to the un-ordered heatmap, we are going to truncate the repeating side of the correlation matrix, as it is not needed. Then the correlation matrix is melted before being plotted.
+
 ```{r}
 # 1. reordering the correlation matrix
 corr_matrix <- reorder_matrix(corr_matrix)
@@ -170,6 +181,7 @@ ordered_heatmap <- ggplot(data = melted_corr_matrix, aes(Var2, Var1, fill = valu
 ```
 
 Again, now we can add value labeling to the squares and move the legend.
+
 ```{r}
 ordered_heatmap +
   geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) + 
@@ -191,6 +203,7 @@ Now we can look at the distribution of each of the columns. The following graphs
 #### Carat
 
 First, we will look at the distribution of the carat of the diamond.
+
 ```{r}
 # mean line plot
 plot1 <- ggplot(data = diamonds_raw, aes(x=carat)) +
@@ -208,7 +221,8 @@ grid.arrange(plot1, plot2, ncol=2) # arrange the plots together
 
 #### Cut, Color, and Clarity
 
-Now we will look at the categorical columns of the dataset. however, we must first convert them to a factor. 
+Now we will look at the categorical columns of the dataset. however, we must first convert them to a factor.
+
 ```{r}
 # convert the cut column into a factor
 diamonds_raw$cut <- factor(diamonds_raw$cut, levels = c("Ideal", "Premium", "Very Good", "Good", "Fair"))
@@ -222,7 +236,8 @@ diamonds_raw$clarity <- factor(diamonds_raw$clarity, levels = c("IF", "VVS1", "V
 
 
 
-With the columns converted, we can make the charts. 
+With the columns converted, we can make the charts.
+
 ```{r}
 # chart for the cut
 plot1 <- ggplot(data = diamonds_raw, aes(x=cut, fill=cut)) +
@@ -250,7 +265,8 @@ From the charts above, we can infer some conclusions about the data in these col
 
 #### Depth & Table
 
-Now, we can look at the table and depth ratios. 
+Now, we can look at the table and depth ratios.
+
 ```{r}
 # mean line plot of depth
 plot1 <- ggplot(data = diamonds_raw, aes(x=depth)) +
@@ -277,6 +293,7 @@ grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow = 2) # arrange the plots t
 ```
 
 Using the graphs above, the table and depth are roughly normal, they just have a steep slope to the bell curve. 
+
 
 #### x, y, & z
 
@@ -371,18 +388,16 @@ grid.arrange(plot1, plot2, ncol=2) # arrange the plots together
 ```
 
 
-
-### Handling outliers in the dataset
-
-
-### Handling outliers
+## Handling outliers
 
 Summary of data before handling outliers.
+
 ```{r}
 summary(diamonds_raw)
 ```
 
-#### Carat outliers
+### Carat outliers
+
 ```{r}
 boxplot(diamonds_raw$carat)
 
@@ -394,10 +409,14 @@ diamond_outliers1 <- diamonds_raw |>
   mutate(zscore = (carat - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers1$carat) #Lost 439 records which is only 0.81% of the data
+summary(diamond_outliers1$carat)
 ```
 
-#### Depth outliers
+We lost 439 records, which represents 0.81% of the data. 
+
+
+### Depth outliers
+
 ```{r}
 boxplot(diamonds_raw$depth)
 
@@ -409,10 +428,14 @@ diamond_outliers2 <- diamond_outliers1 |>
   mutate(zscore = (depth - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
-summary(diamond_outliers2$depth) #Lost 663 records which is a cumulative percentage of 2.04% of the total dataset and 1.24% percent of the outlier1 data set
+summary(diamond_outliers2$depth)
 ```
 
-#### Table outliers
+Now we lost 663 more records (or a total of 1102 records), which represents 2.04% of the full dataset.
+
+
+### Table outliers
+
 ```{r}
 boxplot(diamonds_raw$table)
 
@@ -427,7 +450,11 @@ diamond_outliers3 <- diamond_outliers2 |>
 summary(diamond_outliers3$table) #Lost 264 records which is a cumulative percentage of 2.53% of the total dataset and 0.5% percent of the outlier2 data set
 ```
 
-#### X outliers
+Another 264 records are lost (1366 cumulative), which represents a cumulative loss of 2.53% of the dataset.
+
+
+### X outliers
+
 ```{r}
 boxplot(diamonds_raw$x)
 
@@ -442,7 +469,11 @@ diamond_outliers4 <- diamond_outliers3 |>
 summary(diamond_outliers4$x) #Lost 6 records which is a cumulative percentage of 2.54% of the total dataset and 0.01% percent of the outlier2 data set
 ```
 
-#### Y outliers
+Six more records lost (1372 cumulative), representing a total loss of 2.54% of the dataset.
+
+
+### Y outliers
+
 ```{r}
 boxplot(diamonds_raw$y)
 
@@ -457,7 +488,11 @@ diamond_outliers5 <- diamond_outliers4 |>
 summary(diamond_outliers5$y) #Lost 2 records which is a cumulative percentage of 2.547% of the total dataset and 0.004% percent of the outlier2 data set
 ```
 
-#### Z outliers
+Another two records was lost (1374 cumulative), representing a total loss of 2.547% of the dataset.
+
+
+### Z outliers
+
 ```{r}
 boxplot(diamonds_raw$z)
 
@@ -469,11 +504,14 @@ diamonds_clean <- diamond_outliers5 |>
   mutate(zscore = (z - the_mean)/the_sd) |>
   filter(zscore <= 3 & zscore >= -3)
 
+
 summary(diamonds_clean$z) #Lost 14 records which is a cumulative percentage of 2.60% of the total dataset and 0.03% percent of the outlier2 data set
 ```
 
+Fourteen more records lost (1388 cumulative), which represents a final loss of 2.6% of the data. This percentage of data lost is negatable.
 
-### Encoding Categorical Columns
+
+## Encoding Categorical Columns
 
 We will now re encode the categorical columns into a more logical/numeric columns, for use in some of the models going forward. We will be encoding the following columns in the following way:
 
@@ -508,25 +546,17 @@ diamonds_clean <- diamonds_clean |>
 
 Now that the data wrangling is done, as far as we know, we can finally get into the training of the prediction models.
 
-### Model Predictions
+## Linear Model Predictions
 
-The models we will be comparing are K-means, SVM,logistic regression, linear regression, and Random forest.
-
-#### Linear Regression
-
-The first model we decided to test is linear regression.  
+The model we decided on using was the linear regression model. This model is fairly simple and easy to use.   
 
 ```{r}
 # Split the data into training and testing sets
-sample <- sort(sample(nrow(diamonds_clean), nrow(diamonds_clean) * .70))
+set.seed(1)
+sample <- sort(sample(nrow(diamonds_clean), nrow(diamonds_clean) * .80))
 train <- diamonds_clean[sample, ] # 70% of the data set aside for training
 test <- diamonds_clean[-sample, ] # 30% of the data set aside for testing
 
-
-# the below is for testing purposes 
-sample2 <- sort(sample(nrow(diamonds_clean), nrow(diamonds_clean) * .01))
-train2 <- diamonds_clean[sample, ] #  of the data set aside for training
-test2 <- diamonds_clean[-sample, ] # of the data set aside for testing
 ```
 
 Next we begin to train the model.
@@ -564,11 +594,7 @@ cor(diamonds_clean[, c(1,5,6, 12:25)])
 
 
 # Tweak the model's features based on what we learned 
-<<<<<<< HEAD
-linearModel4 <- lm(price ~ carat + clarity + z + color + table, train)
-=======
-linearModel4 <- lm(price ~ carat  + clarity + z + color + table, train)
->>>>>>> a28f36d0b06134e646bc523cabd722b0ddb93789
+linearModel4 <- lm(price ~ carat  + clarity + color + table, train)
 
 # Check how the new model compares 
 summary(linearModel4)
@@ -576,9 +602,6 @@ summary(linearModel4)
 # Recheck correlations 
 cor(diamonds_clean[, c(1,5,6, 12:25)]) 
 
-
-#the below is for testing purposes 
-linearModel5 <- lm(price ~ carat + clarity + z + color + table, train2)
 
 ```
 
@@ -597,70 +620,17 @@ linearModelRsme
 linearErrorRate <- linearModelRsme/mean(test$price)
 linearErrorRate
 
-
-# the below is for testing purposes 
-diamonds_clean_Linear_Prediction <- predict(linearModel5, test2)
-
-# Output metrics for how the model did
-linearModelRsme2 <- mean((test2$price - diamonds_clean_Linear_Prediction)^2) |>
-  sqrt()
-
-linearModelRsme2
-
-linearErrorRate2 <- linearModelRsme/mean(test2$price)
-linearErrorRate2
 ```
 
+## Conclusions 
+
+The final model that we decided to use for testing was linearModel4.  This model resulted in approximately 71% accuracy in testing.  Predictions of diamond prices are within approximately +-$1,100. Based on the features in the dataset, this is as accurate a model as possible.  One of the things that we learned during our analysis is that even with a substantial amount of data, it is challenging to correctly predict the price of diamonds with a high degree of accuracy. Also, if we were predicting something else, like carat, the model may have performed better; as when researching this dataset, most sources had the goal of predicting the carat of the diamond, not price.
 
 
-#### SVM
+## Breakdown of Contributions
 
-The second model we are comparing is Support Vector Machine, or SVM. This model is also a good candidate for regression predictions.
+Zack: Visualizations, data wrangling, modeling
 
-```{r}
-# create the model
-svm1 <- svm(
-  price ~ carat + clarity + color,
-  data = train,
-  kernal = "sigmoid",
-  cost = 0.5,
-  scale = FALSE)
+Cristian: Data wrangling, modeling 
 
-svm1
-```
-
-With the model created, we can make the predictions and caclulate the relative accuracy of the model.
-
-```{r}
-svm_predict <- predict(svm1, newdata = test)
-svm_table <- table(test$price, svm_predict)
-svm_accuracy <- sum(diag(svm_table)) / sum(svm_table)
-
-#svm_table
-svm_accuracy
-```
-
-
-
-#### Random Forest or Decison Tree
-
-```{r}
-rf <- randomForest(
-  price ~ carat  + clarity + z + color + table, data=train
-)
-rf
-```
-
-```{r}
-rf_predict_claim = predict(rf, newdata = test, type = "class")
-rf_table <- table(test$price, predict_claim)
-
-rf_table
-```
-
-```{r}
-rf_accuracy <- sum(diag(rf_table)) / sum(rf_table)
-
-rf_accuracy
-```
-
+Jake: Data wrangling, modeling 
